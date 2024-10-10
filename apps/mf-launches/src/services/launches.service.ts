@@ -16,12 +16,12 @@ export type IRocketProperties = {
 };
 
 class LaunchesService {
-  getLaunches = async (): Promise<ILaunchProperties[]> => {
+  getLaunches = async (rocketName: string = ""): Promise<ILaunchProperties[]> => {
     //TODO #TASK-FRONTEND-01 choose an http api to make a call to a 
     // endpoint http://localhost:3004/launches or https://testapi.io/api/awgustavo/launches 
     // if you are doing the frontend tasks first
 
-    const launches = await axios.get<ILaunchProperties[], any>("http://localhost:3004/launches")
+    const launches = await axios.get<ILaunchProperties[], any>(`http://localhost:3004/launches?rocketName=${rocketName}`)
 
     return launches.data;
   };

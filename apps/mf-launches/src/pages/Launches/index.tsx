@@ -10,17 +10,24 @@ import style from './index.module.scss';
 
 const Launches = () => {
     const [launches, setLaunches] = useState<ILaunchProperties[]>([]);
+    const [search, setSearch] = useState<string>("");
+    const [isOpen, setIsOpen] = useState(true);
+
     const fetchLaunches = async() => {
-        setLaunches(await LaunchesService.getLaunches());
+        setLaunches(await LaunchesService.getLaunches(search));
     };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.currentTarget.value)
+    }
+
+    function toggleFilter() {
+        setIsOpen((isOpen) => !isOpen);
+    }
 
     useEffect(() => {
         fetchLaunches();
-    }, []);
-
-    const handleChange = (e: any) => {
-        
-    }
+    }, [search]);
 
     return (
         <div className={style.index_page}>
@@ -40,11 +47,23 @@ const Launches = () => {
                         <label htmlFor="saved">Saved search</label>
                         <select name="saved" id=""></select>
                     </div>
-                    <button>
+                    <button onClick={toggleFilter}>
                         <LuSettings2 size={20} />
                     </button>
                 </div>
             </div>
+            { isOpen && (
+                <div>
+                    <div>
+                        <label htmlFor=""></label>
+                        <input type="date" />
+                    </div>
+                    <div>
+                        <label htmlFor=""></label>
+                        <input type="checkbox" />
+                    </div>
+                </div>
+            )}
             <LaunchesList launches={launches} />
         </div>
     );
