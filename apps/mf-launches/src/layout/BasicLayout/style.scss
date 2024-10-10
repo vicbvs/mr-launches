@@ -1,0 +1,19 @@
+.main-layout {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 18rem 1fr;
+  grid-template-rows: theme('spacing.24') auto theme('spacing.20');
+  grid-template-areas:
+  "sidebar header"
+  "sidebar content"
+  "sidebar footer";
+
+  &--footer {
+    grid-area: footer;
+  }
+
+  &--side {
+    grid-area: sidebar;
+    max-width: 22rem;
+  }
+}

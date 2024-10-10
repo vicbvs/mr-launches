@@ -1,0 +1,56 @@
+//TODO #TASK-FRONTEND-03 Create in this or another file (Styled Components or SCSS) a stylesheet guideline for what we will build on the component side.
+
+.index_page {
+    display: grid;
+    gap: 20px;
+
+    > h1 {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 32px;
+        color: #4A85F6;
+        margin-left: 20px;
+    }
+
+    .options {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+        justify-content: space-between;
+
+        .search {
+
+            > svg {                
+                position: absolute;
+                margin: 16px 20px;
+            }
+
+            &_input {
+                width: 672px;
+                border-radius: 16px;
+                padding: 12px 12px 12px 56px;
+            }
+        }
+
+        .add {
+            background-color: #4A85F6;
+            color: white;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 16px;
+        }
+
+        .filter {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: center;
+
+            > div > select {
+                background: transparent;
+            }
+        }
+    }
+}

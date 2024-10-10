@@ -1,0 +1,77 @@
+.results {
+    width: 100%;
+    background-color: white;
+    border-radius: 16px;
+    border: 1px solid #EFF4FA;
+
+    > h1 {
+        color: #222B45;
+        font-size: 17px;
+        line-height: 16px;
+        font-weight: 600;
+        padding: 20px;
+    }
+
+    .table {
+        width: 100%;
+    }
+
+    .header {
+        background-color: #F5F5F5;
+        color: #8F9BB3;
+        font-size: 15px;
+        line-height: 16px;
+        font-weight: 600;
+
+        th {
+            text-align: start;
+            padding: 17px;
+        }
+    }
+
+    .body {
+        td {
+            font-size: 12px;
+            line-height: 16px;
+            padding: 20px;
+        }
+
+        .launchCode {
+            display: grid;
+            color: #222B45;
+            font-size: 13px;
+            font-weight: 600;
+
+            > span {
+                color: #8F9BB3;
+                font-size: 12px;
+                font-weight: 400;
+            }
+        }
+
+        .status > span {
+            display: block;
+            padding: 4px 0;
+            color: white;
+            width: 111px;
+            font-size: 13px;
+            text-align: center;
+            font-weight: 600;
+            border-radius: 8px;
+
+            &.success {
+                background-color: #43C814;
+            }
+
+            &.error {
+                background-color: #FF0505;
+            }
+        }
+
+        .actions {
+            display: flex;
+            gap: 20px;
+            opacity: 50%;
+        }
+    }
+}
