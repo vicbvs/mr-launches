@@ -3,10 +3,10 @@ import style from './index.module.scss';
 import { formatDate } from '@/utils/globals/date';
 import { CiEdit, CiTrash } from "react-icons/ci";
 
-const LaunchesList = ({launches}: {launches: ILaunchProperties[]}) => {
+const LaunchesList = ({launches}: {launches?: ILaunchProperties[]}) => {
   return (
     <div className={style.results}>
-        <h1>Launches List</h1>
+        <h1 data-testid='launches-list-title'>Launches List</h1>
         <table className={style.table}>
             <thead className={style.header}>
                 <tr>
@@ -29,9 +29,9 @@ const LaunchesList = ({launches}: {launches: ILaunchProperties[]}) => {
             </thead>
             <tbody className={style.body}>
                 {
-                    launches.map(launch => {
+                    launches?.map(launch => {
                         return (
-                            <tr key={launch.id}>
+                            <tr key={launch.id} data-testid='launch-id'>
                                 <td>
                                     <div className={style.launchCode}>
                                         {launch.rocket?.name}

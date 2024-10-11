@@ -108,14 +108,14 @@ describe("GET /launches", () => {
         }
     ];
 
-    const responsePromise = new Promise<LaunchesDTO[]>((resolve) => {
-        return resolve(mockLaunches)
+    const responsePromise = (mockedLaunches: LaunchesDTO[] = mockLaunches) => new Promise<LaunchesDTO[]>((resolve) => {
+        return resolve(mockedLaunches)
     })
 
     test('should return all launches', async () => {
         jest
             .spyOn(launchesRepositoryMock, 'findByName')
-            .mockReturnValueOnce(responsePromise)
+            .mockReturnValueOnce(responsePromise())
 
         const launches = await new LaunchesController(
             router,
@@ -129,7 +129,7 @@ describe("GET /launches", () => {
     test('should return launch by name', async () => {
         jest
             .spyOn(launchesRepositoryMock, 'findByName')
-            .mockReturnValueOnce(responsePromise)
+            .mockReturnValueOnce(responsePromise([mockLaunches[1]]))
 
         const launches = await new LaunchesController(
             router,
@@ -143,7 +143,7 @@ describe("GET /launches", () => {
     test('should return launches sorted from oldest to newest by date', async () => {
         jest
             .spyOn(launchesRepositoryMock, 'findByName')
-            .mockReturnValueOnce(responsePromise)
+            .mockReturnValueOnce(responsePromise())
 
         const launches = await new LaunchesController(
             router,
@@ -153,6 +153,7 @@ describe("GET /launches", () => {
         for (let i = 0; i < launches.length - 1; i++) {
             const currentLaunchDate = new Date(launches[i].date);
             const nextLaunchDate = new Date(launches[i + 1].date);
+
             expect(nextLaunchDate <= currentLaunchDate).toBe(true);
         }
     })
@@ -160,17 +161,19 @@ describe("GET /launches", () => {
     test('should return launch with encrypted launchCode using HMAC', async () => {
         jest
             .spyOn(launchesRepositoryMock, 'findByName')
-            .mockReturnValueOnce(responsePromise)
+            .mockReturnValueOnce(responsePromise())
 
         const launches = await new LaunchesController(
             router,
             new LaunchesService(launchesRepositoryMock)
-        ).getLaunchesByRocket("")
+        ).getLaunchesByRocket("")        
 
-        const expectedEncryptedLaunchCode = crypto.createHmac('sha256', 'ABC')
-                                                .update('123456')
+        for (let i = 0; i < launches.length - 1; i++) {
+            const expectedEncryptedLaunchCode = crypto.createHmac('sha256', 'ABC')
+                                                .update(String([mockLaunches[i].launchCode]))
                                                 .digest('hex');
-
-        expect(launches[0].launchCode).toBe(expectedEncryptedLaunchCode);
+                                                
+            expect(launches[i].launchCode).toBe(expectedEncryptedLaunchCode);
+        }
     })
 })

@@ -31,7 +31,7 @@ const Launches = () => {
 
     return (
         <div className={style.index_page}>
-            <h1 data-testid='home-title'>Launches</h1>
+            <h1 data-testid='launches-title'>Launches</h1>
             <div className={style.options}>
                 <div className={style.search}>
                     <IoSearch size={16} />
@@ -64,7 +64,7 @@ const Launches = () => {
                     </div>
                 </div>
             )}
-            <LaunchesList launches={launches} />
+            <LaunchesList data-testid='launches-list' launches={launches} />
         </div>
     );
 };

@@ -10,7 +10,10 @@ const jestConfig: JestConfigWithTsJest = {
     roots: ['<rootDir>/src'],
     testEnvironment: "jsdom",
     modulePaths: [compilerOptions.baseUrl], // <-- This will be set to 'baseUrl' value
-    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
+    moduleNameMapper: {
+        ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
+        '\\.(css|scss)$': '<rootDir>/src/test/__mocks__/styleMock.ts',
+    },
 
     // Jest transformations -- this adds support for TypeScript
     // using ts-jest
