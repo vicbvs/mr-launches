@@ -1,5 +1,8 @@
 import express, { Request, Response, Router } from 'express'
 import cors from 'cors'
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
 import LaunchesController from 'src/application/launches/launches.controller'
 import LaunchesService from 'src/application/launches/launches.service'
 import { AppDataSource } from 'src/infrastructure/repository/data-source'
@@ -17,6 +20,26 @@ async function initialize() {
 
     app.use(cors());
 
+    const swaggerOptions = {
+        definition: {
+            openapi: '3.0.0',
+            info: {
+                title: 'Launches - API Documentation',
+                version: '1.0.0',
+                description: '',
+            },
+            servers: [
+                {
+                    url: 'http://localhost:3004',
+                },
+            ],
+        },
+        apis: ['./src/application/launches/*.ts'],
+    };
+    
+    const swaggerDocs = swaggerJsdoc(swaggerOptions);
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
     app.get('/', (_req: Request, res: Response) => {
         res.json({ keepAlive: Date.now() })
     })
@@ -28,6 +51,7 @@ async function initialize() {
 
     app.listen(3004, () => {
         console.log('App Running: http://localhost:3004')
+        console.log('Swagger docs available on http://localhost:3004/api-docs');
     })
 }
 
