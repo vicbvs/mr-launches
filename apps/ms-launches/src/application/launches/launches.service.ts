@@ -3,6 +3,7 @@ import { LaunchesDomain } from '@domain/launches/launches.domain'
 import { RocketDomain } from '@domain/rockets/rockets.domain'
 import { LaunchesRepository } from '@infrastructure/repository/launches.repository'
 import { LaunchesDTO } from '../../shared/dtos/launches.dto'
+import { FilterParamsDTO } from '@shared/dtos/filter.dto'
 
 export default class LaunchesService {
     constructor(private lauchesRepository: LaunchesRepository) {}
@@ -13,8 +14,8 @@ export default class LaunchesService {
     YOU MAY GOOGLE IT IF NEEDED
    */
   
-    async getByName(name: string): Promise<LaunchesDTO[]> {
-        const launches = await this.lauchesRepository.findByName(name)
+    async getByName(params: FilterParamsDTO): Promise<LaunchesDTO[]> {
+        const launches = await this.lauchesRepository.findByName(params)
         return this.sortByDate(launches.map((launch: LaunchesDTO) => this.cryptoLaunches(launch)))
     }
 

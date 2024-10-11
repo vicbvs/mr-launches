@@ -42,7 +42,7 @@
             line-height: 16px;
         }
 
-        .filter {
+        .settings {
             display: flex;
             gap: 40px;
             justify-content: center;
@@ -51,6 +51,39 @@
             > div > select {
                 background: transparent;
             }
+        }
+    }
+
+    .filter {
+        display: flex;
+        gap: 50px;
+        margin-left: 20px;
+
+        > div {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .date {
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+
+        .successful {
+            width: 15px;
+            height: 15px;
+        }
+
+        .apply {
+            background-color: #4A85F6;
+            color: white;
+            border-radius: 6px;
+            padding: 15px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 16px;
         }
     }
 }

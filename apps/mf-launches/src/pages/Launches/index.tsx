@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { LuSettings2 } from 'react-icons/lu'
 import { IoSearch } from "react-icons/io5";
 
@@ -11,14 +11,29 @@ import style from './index.module.scss';
 const Launches = () => {
     const [launches, setLaunches] = useState<ILaunchProperties[]>([]);
     const [search, setSearch] = useState<string>("");
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState<Boolean>(true);
+
+    const [date, setDate] = useState<string>("");
+    const [successful, setSuccessful] = useState<boolean>(false);
 
     const fetchLaunches = async() => {
-        setLaunches(await LaunchesService.getLaunches(search));
+        setLaunches(await LaunchesService.getLaunches({ rocketName: search, date, successful }));
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.currentTarget.value)
+    }
+
+    const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDate(e.currentTarget.value)
+    }
+
+    const handleSuccessful = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSuccessful(e.currentTarget.checked)
+    }
+
+    const handleApplyFilter = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        fetchLaunches()
     }
 
     function toggleFilter() {
@@ -38,7 +53,7 @@ const Launches = () => {
                     <input type="text" placeholder="Search" className={style.search_input} onChange={handleChange} />
                 </div>
                 <button className={style.add}>Add launch +</button>
-                <div className={style.filter}>
+                <div className={style.settings}>
                     <div>
                         <label htmlFor="sort">Sort by</label>
                         <select name="sort" id=""></select>
@@ -53,14 +68,19 @@ const Launches = () => {
                 </div>
             </div>
             { isOpen && (
-                <div>
+                <div className={style.filter}>
                     <div>
-                        <label htmlFor=""></label>
-                        <input type="date" />
+                        <label htmlFor="dateFilter">Minimum Date:</label>
+                        <input id="dateFilter" type="date" className={style.date} onChange={handleDate} />
                     </div>
                     <div>
-                        <label htmlFor=""></label>
-                        <input type="checkbox" />
+                        <label htmlFor="successful">Only Successful:</label>
+                        <input id="successful" type="checkbox" className={style.successful} onChange={handleSuccessful} />
+                    </div>
+                    <div>
+                        <button className={style.apply} onClick={handleApplyFilter}>
+                            Apply filter
+                        </button>
                     </div>
                 </div>
             )}

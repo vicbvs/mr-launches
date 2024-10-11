@@ -1,7 +1,8 @@
 import { AppDataSource } from './data-source'
 import { Launches } from '../entities/launches.entity'
 import { LaunchesDTO } from '@shared/dtos/launches.dto'
-import { Like } from 'typeorm';
+import { Like, MoreThanOrEqual } from 'typeorm';
+import { FilterParamsDTO } from '@shared/dtos/filter.dto';
 
 export class LaunchesRepository {
     constructor(private repository = AppDataSource.getRepository(Launches)) {}
@@ -11,63 +12,23 @@ export class LaunchesRepository {
     THE ASSOCIATION WITH ROCKET ENTITY. YOU MAY CHECK TYPEORM DOCUMENTATION IF NEEDED
     */
 
-    async findByName(rocketName: string): Promise<LaunchesDTO[]> {
-        
-        // const launches: LaunchesDTO[] = [
-        //     {
-        //         date: new Date(2022, 1, 1),
-        //         id: 1,
-        //         rocketId: 1,
-        //         rocket: { id: 1, name: 'SpaceX1' },
-        //         success: true,
-        //         launchCode: '123456',
-        //     },
-        //     {
-        //         date: new Date(2022, 3, 1),
-        //         id: 2,
-        //         rocketId: 2,
-        //         rocket: { id: 2, name: 'SpaceX2' },
-        //         success: true,
-        //         launchCode: '123456',
-        //     },
-        //     {
-        //         date: new Date(2022, 4, 10),
-        //         id: 3,
-        //         rocketId: 3,
-        //         rocket: { id: 3, name: 'SpaceX3' },
-        //         success: false,
-        //         launchCode: '123456',
-        //     },
-        //     {
-        //         date: new Date(2022, 6, 15),
-        //         id: 4,
-        //         rocketId: 4,
-        //         rocket: { id: 4, name: 'SpaceX4' },
-        //         success: true,
-        //         launchCode: '123456',
-        //     },
-        //     {
-        //         date: new Date(2022, 9, 30),
-        //         id: 5,
-        //         rocketId: 5,
-        //         rocket: { id: 5, name: 'SpaceX5' },
-        //         success: false,
-        //         launchCode: '123456',
-        //     },
-        // ]
-
-        const launches = await this.repository.find({
-            where: {
-                rocket: { 
-                    name: Like(`%${rocketName}%`) 
+    async findByName(params: FilterParamsDTO): Promise<LaunchesDTO[]> {
+        try {
+            const launches = await this.repository.find({
+                where: {
+                    
+                    rocket: { name: Like(`%${params?.rocketName}%`) },
+                    ...(params?.date ? { date: MoreThanOrEqual(new Date(params.date)) } : {}),
+                    ...(params?.successful ? { success: params?.successful } : {})
+                },
+                relations: {
+                    rocket: true
                 }
-            },
-            relations: {
-                rocket: true
-            }
-        });
-
-        return launches.map(launch => this.parseEntityToDto(launch));
+            });
+            return launches.map(launch => this.parseEntityToDto(launch));
+        } catch(err) {
+            console.log(err)
+        }
     }
 
     async save(launch: LaunchesDTO) {

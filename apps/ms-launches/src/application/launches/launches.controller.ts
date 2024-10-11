@@ -3,6 +3,7 @@ import ValidationError from '@shared/errors/validation.error'
 
 import { LaunchesDTO } from '../../shared/dtos/launches.dto'
 import LaunchesService from './launches.service'
+import { FilterParamsDTO } from '@shared/dtos/filter.dto'
 
 export default class LaunchesController {
     constructor(router: Router, private launchesService: LaunchesService) {
@@ -25,8 +26,13 @@ export default class LaunchesController {
 
         router?.get('/launches', async (req: Request, res: Response) => {
             try {
-                const rocketName = String(req.query.rocketName || '')
-                const launches = await this.getLaunchesByRocket(rocketName)
+                const params: FilterParamsDTO = {
+                    rocketName: String(req.query.rocketName || ''),
+                    date: String(req.query.date || ''),
+                    successful: req.query.successful === 'false' ? false : true
+                }
+
+                const launches = await this.getLaunchesByRocket(params)
                 return res.json(launches)
             } catch (error) {
                 return res.status(500).send(error)
@@ -34,8 +40,8 @@ export default class LaunchesController {
         })
     }
 
-    async getLaunchesByRocket(rocketName: string): Promise<LaunchesDTO[]> {
-        return await this.launchesService.getByName(rocketName)
+    async getLaunchesByRocket(params: FilterParamsDTO): Promise<LaunchesDTO[]> {
+        return await this.launchesService.getByName(params)
     }
 
     async saveLaunch(launch: LaunchesDTO) {
